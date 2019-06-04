@@ -1,0 +1,14 @@
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\ChatServer.dll
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\ChatServer.pdb
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\ExitGamesLibs.dll
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\Photon.SocketServer.dll
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\ExitGamesLibs.pdb
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\ExitGamesLibs.xml
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\Photon.SocketServer.pdb
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\Photon.SocketServer.xml
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\bin\Debug\Photon.SocketServer.dll.config
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\obj\Debug\ChatServer.csprojAssemblyReference.cache
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\obj\Debug\ChatServer.csproj.CoreCompileInputs.cache
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\obj\Debug\ChatServer.csproj.CopyComplete
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\obj\Debug\ChatServer.dll
+C:\Users\wengjx\source\repos\ChatServer\ChatServer\obj\Debug\ChatServer.pdb
