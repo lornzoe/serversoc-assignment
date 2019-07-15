@@ -1,0 +1,108 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.1",
+    "signature": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.1": {
+      "RaiseEventTestPlugin/1.0.0": {
+        "dependencies": {
+          "ExitGamesLibs": "1.0.4.0",
+          "Photon.SocketServer": "4.0.28.11245",
+          "Photon3DotNet": "4.0.5.0",
+          "PhotonHivePlugin": "1.0.15.11060",
+          "PhotonHostRuntimeInterfaces": "3.58.0.0"
+        },
+        "runtime": {
+          "RaiseEventTestPlugin.dll": {}
+        }
+      },
+      "ExitGamesLibs/1.0.4.0": {
+        "runtime": {
+          "ExitGamesLibs.dll": {
+            "assemblyVersion": "1.0.4.0",
+            "fileVersion": "1.0.4.0"
+          }
+        }
+      },
+      "Photon.SocketServer/4.0.28.11245": {
+        "runtime": {
+          "Photon.SocketServer.dll": {
+            "assemblyVersion": "4.0.28.11245",
+            "fileVersion": "4.0.28.11245"
+          }
+        }
+      },
+      "Photon3DotNet/4.0.5.0": {
+        "runtime": {
+          "Photon3DotNet.dll": {
+            "assemblyVersion": "4.0.5.0",
+            "fileVersion": "4.0.5.0"
+          }
+        }
+      },
+      "PhotonHivePlugin/1.0.15.11060": {
+        "runtime": {
+          "PhotonHivePlugin.dll": {
+            "assemblyVersion": "1.0.15.11060",
+            "fileVersion": "1.0.15.11060"
+          }
+        }
+      },
+      "PhotonHostRuntimeInterfaces/3.58.0.0": {
+        "runtime": {
+          "PhotonHostRuntimeInterfaces.dll": {
+            "assemblyVersion": "3.58.0.0",
+            "fileVersion": "3.58.0.0"
+          }
+        }
+      },
+      "websocket-sharp/1.0.2.28411": {
+        "runtime": {
+          "websocket-sharp.dll": {
+            "assemblyVersion": "1.0.2.28411",
+            "fileVersion": "1.0.2.28411"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "RaiseEventTestPlugin/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ExitGamesLibs/1.0.4.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Photon.SocketServer/4.0.28.11245": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Photon3DotNet/4.0.5.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PhotonHivePlugin/1.0.15.11060": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PhotonHostRuntimeInterfaces/3.58.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "websocket-sharp/1.0.2.28411": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

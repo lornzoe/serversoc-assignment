@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Photon.Hive;
 using MySql.Data;
 using MySql.Data.MySqlClient;
-
+using System.IO;
 
 using Photon.Hive.Plugin;
 namespace TestPlugin
@@ -35,7 +35,6 @@ namespace TestPlugin
             this.CallsCount = 0;
 
             ConnectToMySQL();
-
         }
         public override string Name
         {
@@ -92,6 +91,7 @@ namespace TestPlugin
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 //int check = // cmd.ExecuteNonQuery();'
+
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 //string sql = "INSERT INTO `accountdb`.`login_account` (`login_name`, `password`) VALUES('" + playerName + "', '" + playerPassword + "')";
@@ -102,29 +102,46 @@ namespace TestPlugin
 
                 if (reader.HasRows) // if the account exists
                 {
-                    reader.Dispose();
+
+                    reader.Close();
                     sql = "SELECT * FROM accountdb.login_account WHERE login_name = '" + playerName + "' AND password = '" + playerPassword + "'";
                     cmd = new MySqlCommand(sql, conn);
                     reader = cmd.ExecuteReader();
 
                     if (!reader.HasRows) // password doesnt match lol
                     {
-                        ResponseMessage = "Username's password does not match the database. Updating password.";
+                        ResponseMessage = "wrongPassword";
                     }
                     else
                     {
-                        ResponseMessage = "Success. Logging you in now.";
+                        reader.Read();
+
+                        ResponseMessage = "correctPassword";
+
+                        object[] objArray1 = new object[4];
+
+                        objArray1[0] = "playerName=";
+                        objArray1[1] = reader[0];
+                        objArray1[2] = ",position=";
+                        objArray1[3] = reader[3];
+
+                        ResponseMessage = string.Concat(objArray1);
                     }
+                    reader.Close();
+
                 }
 
                 else // if the account DOESNT exists
                 {
+                    reader.Close();
+
+                    this.PluginHost.LogDebug("asdf");
                     // we'll make a new account.
                     sql = "INSERT INTO `accountdb`.`login_account` (`login_name`, `password`) VALUES('" + playerName + "', '" + playerPassword + "')";
                     cmd = new MySqlCommand(sql, conn);
                     cmd.ExecuteNonQuery();
 
-                    ResponseMessage = "Made a new entry.";
+                    ResponseMessage = "newPlayer";
                 }
 
 
@@ -136,11 +153,19 @@ namespace TestPlugin
                 //string ReturnMessage = info.Nickname + " clicked the button. Now the count is " + cnt.ToString();
 
                 //this.PluginHost.BroadcastEvent(target: ReciverGroup.All,
-                //senderActor: 0,
+                //senderActor: 0,   
                 //targetGroup: 0,
                 //data: new Dictionary<byte, object>() { { (byte)245, ResponseMessage } },
                 //evCode: info.Request.EvCode,
                 //cacheOp: 0);
+                reader.Dispose();
+
+                Dictionary<byte, object> dictionary = new Dictionary<byte, object>();
+                dictionary.Add(250, ResponseMessage);
+                SendParameters parameters = new SendParameters();
+                base.PluginHost.BroadcastEvent(0, 0, 0, 250, dictionary, 0, parameters);
+
+
             }
         }
 
@@ -168,5 +193,50 @@ namespace TestPlugin
                 return nameValuePair1[1];
 
         }
+
+        //private byte[] SerializeCustomPluginType(object o)
+        //{
+        //    CustomPluginType customObject = o as CustomPluginType; // cast it first
+        //    if (customObject == null)
+        //        return null;
+
+        //    using (var s = new MemoryStream())
+        //    {
+        //        using (var bw = new BinaryWriter(s))
+        //        {
+        //            bw.Write(customObject.intField);
+        //            bw.Write(customObject.byteField);
+        //            bw.Write(customObject.stringField);
+
+        //            return s.ToArray();
+        //        }
+        //    }
+        //}
+
+        //private object DeserializeCustomPluginType(byte[] bytes)
+        //{
+        //    CustomPluginType customObject = new CustomPluginType();
+        //    using (var s = new MemoryStream(bytes))
+        //    {
+        //        using (var br = new BinaryReader(s))
+        //        {
+        //            customObject.intField = br.ReadInt32();
+        //            customObject.byteField = br.ReadByte();
+        //            customObject.stringField = br.ReadString();
+        //        }
+        //    }
+        //    return customObject;
+        //}
+
+        //public override bool SetupInstance(IPluginHost host, Dictionary<string, string> config, out string errorMsg)
+        //{
+        //    PluginHost.LogDebug("Setting up overrided instance from RaiseEventTestPlugin.cs!");
+        //    host.TryRegisterType(typeof(CustomPluginType), 1,
+        //        SerializeCustomPluginType,
+        //        DeserializeCustomPluginType);
+        //    PluginHost.LogDebug("Finished setting up overrided instance from RaiseEventTestPlugin.cs, now returning!");
+        //    PluginHost.LogDebug(" REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        //    return base.SetupInstance(host, config, out errorMsg);
+        //}
     }
 }
