@@ -2748,7 +2748,10 @@ internal class NetworkingPeer : LoadBalancingPeer, IPhotonPeerListener
 			break;
             case PunEvent.PlayerLogin:
                 {
-                    string dataString = photonEvent.Parameters[photonEvent.Code].ToString();
+
+                    CustomLoginResponse loginResponse = (CustomLoginResponse)CustomLoginResponse.Deserialize((byte[])photonEvent.Parameters[photonEvent.Code]);
+                    string dataString = loginResponse.response;
+
                     Debug.Log("Data: " + dataString);
                     if (dataString == "wrongPassword")
                     {

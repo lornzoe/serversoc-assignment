@@ -8,8 +8,8 @@ using Photon.Hive;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.IO;
-
 using Photon.Hive.Plugin;
+
 namespace TestPlugin
 {
     public class RaiseEventTestPlugin : PluginBase
@@ -44,6 +44,13 @@ namespace TestPlugin
             }
         }
 
+        public override bool SetupInstance(IPluginHost host, Dictionary<string, string> config, out string errorMsg)
+        {
+            host.TryRegisterType(typeof(CustomLoginType), (byte)1, CustomLoginType.Serialize, CustomLoginType.Deserialize);
+            host.TryRegisterType(typeof(CustomLoginResponse), (byte)1, CustomLoginResponse.Serialize, CustomLoginResponse.Deserialize);
+            return base.SetupInstance(host, config, out errorMsg);
+        }
+
         public void ConnectToMySQL()
         {
             // Connect to MySQL
@@ -76,18 +83,18 @@ namespace TestPlugin
                 this.PluginHost.BroadcastErrorInfoEvent(e.ToString(), info);
                 return;
             }
-            if (info.Request.EvCode == 1)
+            if (info.Request.EvCode == (byte)1)
             {
 
+                CustomLoginType loginInfo = (CustomLoginType)CustomLoginType.Deserialize( (byte[])info.Request.Data );
+                //string RecvdMessage = Encoding.UTF8.GetString((byte[])info.Request.Data);
 
-                string RecvdMessage = Encoding.UTF8.GetString((byte[])info.Request.Data);
-
-                string playerName = GetStringDataFromMessage("PlayerName", RecvdMessage); // playerName == Guest3721
-                string playerPassword = GetStringDataFromMessage("Password", RecvdMessage); // playerPassword == 1234
+                //string playerName = GetStringDataFromMessage("PlayerName", RecvdMessage); // playerName == Guest3721
+                //string playerPassword = GetStringDataFromMessage("Password", RecvdMessage); // playerPassword == 1234
 
                 // string sql = "INSERT INTO login_account (login_name, password) VALUES ('aassdd', 'asdasd')";
 
-                string sql = "SELECT * FROM accountdb.login_account WHERE login_name = '" + playerName + "'";
+                string sql = "SELECT * FROM accountdb.login_account WHERE login_name = '" + loginInfo.username + "'";
 
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 //int check = // cmd.ExecuteNonQuery();'
@@ -99,12 +106,13 @@ namespace TestPlugin
                 //cmd.ExecuteNonQuery();
 
                 string ResponseMessage;
+                CustomLoginResponse loginResponse = new CustomLoginResponse();
 
                 if (reader.HasRows) // if the account exists
                 {
 
                     reader.Close();
-                    sql = "SELECT * FROM accountdb.login_account WHERE login_name = '" + playerName + "' AND password = '" + playerPassword + "'";
+                    sql = "SELECT * FROM accountdb.login_account WHERE login_name = '" + loginInfo.username + "' AND password = '" + loginInfo.password + "'";
                     cmd = new MySqlCommand(sql, conn);
                     reader = cmd.ExecuteReader();
 
@@ -137,31 +145,19 @@ namespace TestPlugin
 
                     this.PluginHost.LogDebug("asdf");
                     // we'll make a new account.
-                    sql = "INSERT INTO `accountdb`.`login_account` (`login_name`, `password`) VALUES('" + playerName + "', '" + playerPassword + "')";
+                    sql = "INSERT INTO `accountdb`.`login_account` (`login_name`, `password`) VALUES('" + loginInfo.username + "', '" + loginInfo.password + "')";
                     cmd = new MySqlCommand(sql, conn);
                     cmd.ExecuteNonQuery();
 
                     ResponseMessage = "newPlayer";
                 }
 
-
-
-                this.PluginHost.LogDebug(RecvdMessage);
-
-                //++this.CallsCount;
-                //int cnt = this.CallsCount;
-                //string ReturnMessage = info.Nickname + " clicked the button. Now the count is " + cnt.ToString();
-
-                //this.PluginHost.BroadcastEvent(target: ReciverGroup.All,
-                //senderActor: 0,   
-                //targetGroup: 0,
-                //data: new Dictionary<byte, object>() { { (byte)245, ResponseMessage } },
-                //evCode: info.Request.EvCode,
-                //cacheOp: 0);
                 reader.Dispose();
 
+                loginResponse.response = ResponseMessage;
+
                 Dictionary<byte, object> dictionary = new Dictionary<byte, object>();
-                dictionary.Add(250, ResponseMessage);
+                dictionary.Add(250, (object)CustomLoginResponse.Serialize((object)loginResponse));
                 SendParameters parameters = new SendParameters();
                 base.PluginHost.BroadcastEvent(0, 0, 0, 250, dictionary, 0, parameters);
 
@@ -194,49 +190,5 @@ namespace TestPlugin
 
         }
 
-        //private byte[] SerializeCustomPluginType(object o)
-        //{
-        //    CustomPluginType customObject = o as CustomPluginType; // cast it first
-        //    if (customObject == null)
-        //        return null;
-
-        //    using (var s = new MemoryStream())
-        //    {
-        //        using (var bw = new BinaryWriter(s))
-        //        {
-        //            bw.Write(customObject.intField);
-        //            bw.Write(customObject.byteField);
-        //            bw.Write(customObject.stringField);
-
-        //            return s.ToArray();
-        //        }
-        //    }
-        //}
-
-        //private object DeserializeCustomPluginType(byte[] bytes)
-        //{
-        //    CustomPluginType customObject = new CustomPluginType();
-        //    using (var s = new MemoryStream(bytes))
-        //    {
-        //        using (var br = new BinaryReader(s))
-        //        {
-        //            customObject.intField = br.ReadInt32();
-        //            customObject.byteField = br.ReadByte();
-        //            customObject.stringField = br.ReadString();
-        //        }
-        //    }
-        //    return customObject;
-        //}
-
-        //public override bool SetupInstance(IPluginHost host, Dictionary<string, string> config, out string errorMsg)
-        //{
-        //    PluginHost.LogDebug("Setting up overrided instance from RaiseEventTestPlugin.cs!");
-        //    host.TryRegisterType(typeof(CustomPluginType), 1,
-        //        SerializeCustomPluginType,
-        //        DeserializeCustomPluginType);
-        //    PluginHost.LogDebug("Finished setting up overrided instance from RaiseEventTestPlugin.cs, now returning!");
-        //    PluginHost.LogDebug(" REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-        //    return base.SetupInstance(host, config, out errorMsg);
-        //}
     }
 }

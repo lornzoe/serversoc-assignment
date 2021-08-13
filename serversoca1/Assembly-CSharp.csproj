@@ -67,6 +67,8 @@
     <Compile Include="Assets\DemoVikings\Demo\Assets\Label\Label.cs" />
     <Compile Include="Assets\DemoVikings\Demo\Assets\SetupVerification.cs" />
     <Compile Include="Assets\DemoVikings\Scripts\ChatVik.cs" />
+    <Compile Include="Assets\DemoVikings\Scripts\CustomLoginResponse.cs" />
+    <Compile Include="Assets\DemoVikings\Scripts\CustomLoginType.cs" />
     <Compile Include="Assets\DemoVikings\Scripts\GameManagerVik.cs" />
     <Compile Include="Assets\DemoVikings\Scripts\MainMenuVik.cs" />
     <Compile Include="Assets\DemoVikings\Scripts\ThirdPersonCameraNET.cs" />

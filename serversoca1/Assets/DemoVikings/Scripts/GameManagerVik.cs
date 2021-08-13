@@ -17,9 +17,16 @@ public class GameManagerVik : Photon.MonoBehaviour {
     public void DoRaiseEvent()
     {
         byte evCode = 1;
-        string contentMessage = "PlayerName=" + PhotonNetwork.playerName + ", Password=" +
-       PlayerPrefs.GetString("playerPassword");
-        byte[] content = Encoding.UTF8.GetBytes(contentMessage);
+        CustomLoginType contentMessage = new CustomLoginType();
+        contentMessage.username = PhotonNetwork.playerName;
+        contentMessage.password = PlayerPrefs.GetString("playerPassword");
+
+        //string contentMessage = "PlayerName=" + PhotonNetwork.playerName + ", Password=" +
+        // PlayerPrefs.GetString("playerPassword");
+        //byte[] content = Encoding.UTF8.GetBytes(contentMessage);
+
+        byte[] content = CustomLoginType.Serialize(contentMessage);
+
         bool reliable = true;
         PhotonNetwork.RaiseEvent(evCode, content, reliable, null);
     }
